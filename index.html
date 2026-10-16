@@ -54,7 +54,7 @@
       <!-- 寵物公園 -->
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100">
         <h2 class="font-bold text-slate-700 mb-3 flex items-center space-x-2">
-          <span>🌳</span> <span>周邊寵物公園與綠地 (由近至遠)</span>
+          <span>🌳</span> <span>當前區域寵物公園與綠地</span>
         </h2>
         <div id="park-distance-container" class="space-y-2">
           <div class="text-center py-6 text-slate-400 text-xs">請點擊右上角「⚙️ 設定」輸入地址以計算距離</div>
@@ -68,7 +68,7 @@
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100">
         <div class="flex justify-between items-center mb-3">
           <h2 class="font-bold text-slate-700 flex items-center space-x-2">
-            <span>🥩</span> <span>周邊寵物友善餐廳 (由近至遠)</span>
+            <span>🥩</span> <span>當前區域寵物友善餐廳</span>
           </h2>
           <button onclick="rollDice()" class="bg-indigo-600 text-white text-xs px-2.5 py-1 rounded-lg font-bold shadow-sm">🎲 幫選一個</button>
         </div>
@@ -80,7 +80,7 @@
       <!-- 動物醫院 -->
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-rose-100">
         <h2 class="font-bold text-slate-700 mb-3 flex items-center space-x-2">
-          <span>🏥</span> <span>周邊動物醫院與 24h 急診 (由近至遠)</span>
+          <span>🏥</span> <span>當前區域動物醫院與急診</span>
         </h2>
         <div id="vet-distance-container" class="space-y-2">
           <div class="text-center py-6 text-slate-400 text-xs">請點擊右上角「⚙️ 設定」輸入地址以計算距離</div>
@@ -207,11 +207,11 @@
       <div class="space-y-3 text-xs">
         <div>
           <label class="block font-bold text-slate-600 mb-1">寶貝名字</label>
-          <input id="input-pet-name" type="text" placeholder="例如：幸運毛孩" class="w-full p-2.5 border rounded-xl outline-indigo-500">
+          <input id="input-pet-name" type="text" placeholder="例如：55" class="w-full p-2.5 border rounded-xl outline-indigo-500">
         </div>
         <div>
           <label class="block font-bold text-slate-600 mb-1">住址 (全台灣皆可輸入)</label>
-          <input id="input-address" type="text" placeholder="例如：新北市中和區景新街410巷18號" class="w-full p-2.5 border rounded-xl outline-indigo-500">
+          <input id="input-address" type="text" placeholder="例如：台中市西屯區、新北市中和區、宜蘭縣羅東鎮" class="w-full p-2.5 border rounded-xl outline-indigo-500">
         </div>
         <div>
           <label class="block font-bold text-slate-600 mb-1">生日</label>
@@ -230,38 +230,37 @@
   </div>
 
   <script>
-    // 全台灣 22 縣市寵物公園
+    // 帶有區域標籤的景點資料庫 (city 標籤用於嚴格區域對應)
     const masterParks = [
-      { name: "四號公園 (中和公園)", desc: "新北市中和區 | 廣闊綠地與寵物活動區", lat: 24.9982, lng: 121.5125 },
-      { name: "板橋萬坪公園", desc: "新北市板橋區 | 市中心綠地步道", lat: 25.0135, lng: 121.4630 },
-      { name: "大安森林公園", desc: "台北市大安區 | 廣闊綠地與休閒步道", lat: 25.0330, lng: 121.5354 },
-      { name: "迎風狗運動公園", desc: "台北市松山區 | 大小犬分區、專屬圍欄跑跑區", lat: 25.0710, lng: 121.5580 },
-      { name: "羅東運動公園", desc: "宜蘭縣羅東鎮 | 水岸綠地與廣闊跑跑區", lat: 24.6820, lng: 121.7510 },
-      { name: "文修公園", desc: "台中市西屯區 | 湖畔步道與廣闊綠地", lat: 24.1842, lng: 120.6472 },
-      { name: "凹子底森林公園", desc: "高雄市鼓山區 | 大片草地與極佳跑跑空間", lat: 22.6575, lng: 120.3015 }
+      { name: "四號公園 (中和公園)", city: "中和", desc: "新北市中和區 | 廣闊綠地與寵物活動區", lat: 24.9982, lng: 121.5125 },
+      { name: "板橋萬坪公園", city: "新北", desc: "新北市板橋區 | 市中心綠地步道", lat: 25.0135, lng: 121.4630 },
+      { name: "大安森林公園", city: "台北", desc: "台北市大安區 | 廣闊綠地與休閒步道", lat: 25.0330, lng: 121.5354 },
+      { name: "迎風狗運動公園", city: "台北", desc: "台北市松山區 | 大小犬分區、專屬圍欄跑跑區", lat: 25.0710, lng: 121.5580 },
+      { name: "羅東運動公園", city: "宜蘭", desc: "宜蘭縣羅東鎮 | 水岸綠地與廣闊跑跑區", lat: 24.6820, lng: 121.7510 },
+      { name: "文修公園", city: "台中", desc: "台中市西屯區 | 湖畔步道與廣闊綠地", lat: 24.1842, lng: 120.6472 },
+      { name: "凹子底森林公園", city: "高雄", desc: "高雄市鼓山區 | 大片草地與極佳跑跑空間", lat: 22.6575, lng: 120.3015 }
     ];
 
-    // 全台灣寵物餐廳
     const masterRestaurants = [
-      { name: "私藏不藏私", desc: "新北市中和區景安路167巷6號 | 寵物友善雜貨咖啡", lat: 24.9940, lng: 121.5035 },
-      { name: "PS BUBU 金蜜蜂寵物餐廳", desc: "台北市士林區中山北路七段140巷1號 | 主題餐廳", lat: 25.1235, lng: 121.5320 },
-      { name: "灆咖啡 Seaview Coffee", desc: "宜蘭縣頭城鎮濱海路二段 | 海景咖啡館", lat: 24.8720, lng: 121.8320 },
-      { name: "烏竹樓 OT Kitchen", desc: "台中市西屯區西安街166號 | 毛孩可落地", lat: 24.1821, lng: 120.6461 },
-      { name: "HOME 燒肉 逢甲店", desc: "台中市西屯區河南路二段256號 | 招待水煮肉", lat: 24.1741, lng: 120.6482 },
-      { name: "狗浪趴 Dogs Love Park", desc: "高雄市楠梓區創新路 | 大草皮與游泳池", lat: 22.7480, lng: 120.3320 }
+      { name: "私藏不藏私", city: "中和", desc: "新北市中和區景安路167巷6號 | 寵物友善雜貨咖啡", lat: 24.9940, lng: 121.5035 },
+      { name: "PS BUBU 金蜜蜂寵物餐廳", city: "台北", desc: "台北市士林區中山北路七段140巷1號 | 主題餐廳", lat: 25.1235, lng: 121.5320 },
+      { name: "灆咖啡 Seaview Coffee", city: "宜蘭", desc: "宜蘭縣頭城鎮濱海路二段 | 海景咖啡館", lat: 24.8720, lng: 121.8320 },
+      { name: "烏竹樓 OT Kitchen", city: "台中", desc: "台中市西屯區西安街166號 | 毛孩可落地", lat: 24.1821, lng: 120.6461 },
+      { name: "HOME 燒肉 逢甲店", city: "台中", desc: "台中市西屯區河南路二段256號 | 招待水煮肉", lat: 24.1741, lng: 120.6482 },
+      { name: "Uni cafe 與你咖啡", city: "台中", desc: "台中市西屯區漢翔北街37號 | 戶外石子庭院", lat: 24.1885, lng: 120.6465 },
+      { name: "狗浪趴 Dogs Love Park", city: "高雄", desc: "高雄市楠梓區創新路 | 大草皮與游泳池", lat: 22.7480, lng: 120.3320 }
     ];
 
-    // 全台灣動物醫院
     const masterVets = [
-      { name: "中和全興動物醫院", desc: "新北市中和區中山路二段 | 中和急診門診", phone: "0222485599", lat: 25.0005, lng: 121.5050 },
-      { name: "台大動物醫院", desc: "台北市大安區基隆路三段153號 | 教學醫院", phone: "0227396828", lat: 25.0135, lng: 121.5435 },
-      { name: "宜蘭羅東動物醫院", desc: "宜蘭縣羅東鎮 | 急診門診", phone: "039552277", lat: 24.6750, lng: 121.7680 },
-      { name: "邁阿密動物醫院", desc: "台中市西屯區西屯路二段269-12號 | 一般門診/疫苗", phone: "0424528119", lat: 24.1751, lng: 120.6432 },
-      { name: "🚨 全國動物醫院 總院 (24h 急診)", desc: "台中市西區五權八街100號 | 24小時不打烊", phone: "0423710496", lat: 24.1382, lng: 120.6621 },
-      { name: "高雄中興動物醫院 農16總院", desc: "高雄市鼓山區大順一路939號 | 重症急診", phone: "075503532", lat: 22.6580, lng: 120.3045 }
+      { name: "中和全興動物醫院", city: "中和", desc: "新北市中和區中山路二段 | 中和急診門診", phone: "0222485599", lat: 25.0005, lng: 121.5050 },
+      { name: "台大動物醫院", city: "台北", desc: "台北市大安區基隆路三段153號 | 教學醫院", phone: "0227396828", lat: 25.0135, lng: 121.5435 },
+      { name: "宜蘭羅東動物醫院", city: "宜蘭", desc: "宜蘭縣羅東鎮 | 急診門診", phone: "039552277", lat: 24.6750, lng: 121.7680 },
+      { name: "邁阿密動物醫院", city: "台中", desc: "台中市西屯區西屯路二段269-12號 | 一般門診/疫苗", phone: "0424528119", lat: 24.1751, lng: 120.6432 },
+      { name: "🚨 全國動物醫院 總院 (24h 急診)", city: "台中", desc: "台中市西區五權八街100號 | 24小時不打烊", phone: "0423710496", lat: 24.1382, lng: 120.6621 },
+      { name: "高雄中興動物醫院 農16總院", city: "高雄", desc: "高雄市鼓山區大順一路939號 | 重症急診", phone: "075503532", lat: 22.6580, lng: 120.3045 }
     ];
 
-    let appConfig = { petName: "", address: "", bday: "", homeday: "", userLat: null, userLng: null };
+    let appConfig = { petName: "", address: "", regionKey: "", userLat: null, userLng: null };
     let outfitsList = [
       { name: "粉紅色長袖", color: "#ec4899", desc: "💗 經典粉紅保暖外套，軟萌又暖呼呼！" },
       { name: "條紋長袖", color: "#ef4444", desc: "👕 經典紅白條紋長袖，簡約亮眼！" },
@@ -303,16 +302,25 @@
       return (R * c).toFixed(1);
     }
 
+    // 地名與區域 Key 識別
+    function detectRegionKey(addr) {
+      if (!addr) return "";
+      if (addr.includes("中和") || addr.includes("景新街")) return "中和";
+      if (addr.includes("台中") || addr.includes("臺中") || addr.includes("西屯") || addr.includes("逢甲")) return "台中";
+      if (addr.includes("宜蘭") || addr.includes("羅東") || addr.includes("頭城")) return "宜蘭";
+      if (addr.includes("高雄") || addr.includes("左營") || addr.includes("鼓山")) return "高雄";
+      if (addr.includes("台北") || addr.includes("臺北") || addr.includes("大安")) return "台北";
+      if (addr.includes("新北") || addr.includes("板橋")) return "新北";
+      return "台北";
+    }
+
     function getCityFallbackCoords(addr) {
-      if (!addr) return null;
-      if (addr.includes("中和") || addr.includes("景新街")) return { lat: 24.9920, lng: 121.5170 };
-      if (addr.includes("永和")) return { lat: 25.0080, lng: 121.5150 };
-      if (addr.includes("板橋")) return { lat: 25.0135, lng: 121.4630 };
-      if (addr.includes("新北")) return { lat: 25.0135, lng: 121.4630 };
-      if (addr.includes("台北") || addr.includes("臺北") || addr.includes("大安")) return { lat: 25.0330, lng: 121.5654 };
-      if (addr.includes("宜蘭") || addr.includes("羅東")) return { lat: 24.7570, lng: 121.7530 };
-      if (addr.includes("台中") || addr.includes("臺中") || addr.includes("西屯")) return { lat: 24.1800, lng: 120.6450 };
-      if (addr.includes("高雄")) return { lat: 22.6273, lng: 120.3014 };
+      const key = detectRegionKey(addr);
+      if (key === "中和") return { lat: 24.9920, lng: 121.5170 };
+      if (key === "台中") return { lat: 24.1800, lng: 120.6450 };
+      if (key === "宜蘭") return { lat: 24.7570, lng: 121.7530 };
+      if (key === "高雄") return { lat: 22.6273, lng: 120.3014 };
+      if (key === "新北") return { lat: 25.0135, lng: 121.4630 };
       return { lat: 25.0330, lng: 121.5654 };
     }
 
@@ -331,13 +339,10 @@
     async function saveSettings() {
       const newPetName = (document.getElementById('input-pet-name').value || '').trim();
       const newAddress = (document.getElementById('input-address').value || '').trim();
-      const newBday = (document.getElementById('input-bday').value || '').trim();
-      const newHomeday = (document.getElementById('input-homeday').value || '').trim();
 
       appConfig.petName = newPetName;
       appConfig.address = newAddress;
-      appConfig.bday = newBday;
-      appConfig.homeday = newHomeday;
+      appConfig.regionKey = detectRegionKey(newAddress);
 
       if (newAddress) {
         document.getElementById('header-address').innerText = "📍 定位計算中...";
@@ -350,21 +355,18 @@
       } else {
         appConfig.userLat = null;
         appConfig.userLng = null;
+        appConfig.regionKey = "";
       }
 
-      localStorage.setItem('pet_app_clean_config_v3', JSON.stringify(appConfig));
+      localStorage.setItem('pet_app_strict_region_v4', JSON.stringify(appConfig));
       forceRenderAll();
       toggleSettingsModal();
     }
 
     function resetAppCache() {
-      localStorage.removeItem('pet_app_clean_config_v3');
-      localStorage.removeItem('pet_app_outfits_v3');
-      localStorage.removeItem('pet_app_photos_v3');
-      appConfig = { petName: "", address: "", bday: "", homeday: "", userLat: null, userLng: null };
+      localStorage.removeItem('pet_app_strict_region_v4');
+      appConfig = { petName: "", address: "", regionKey: "", userLat: null, userLng: null };
       forceRenderAll();
-      renderOutfitsUI();
-      renderGallery();
       toggleSettingsModal();
     }
 
@@ -376,7 +378,7 @@
       document.getElementById('header-address').innerText = pAddr;
       document.getElementById('outfit-pet-name').innerText = pName;
 
-      if (!appConfig.userLat || !appConfig.userLng) {
+      if (!appConfig.userLat || !appConfig.userLng || !appConfig.regionKey) {
         const emptyTip = `<div class="text-center py-6 text-slate-400 text-xs">請點擊右上角「⚙️ 設定」輸入地址以計算距離</div>`;
         document.getElementById('park-distance-container').innerHTML = emptyTip;
         document.getElementById('restaurant-distance-container').innerHTML = emptyTip;
@@ -384,12 +386,15 @@
         return;
       }
 
-      // 公園
-      const sortedParks = masterParks.map(p => ({
-        ...p, dist: parseFloat(getDistanceKm(appConfig.userLat, appConfig.userLng, p.lat, p.lng))
-      })).sort((a, b) => a.dist - b.dist);
+      const curRegion = appConfig.regionKey;
 
-      document.getElementById('park-distance-container').innerHTML = sortedParks.map((p, idx) => `
+      // 1. 純區域過濾 - 公園
+      const filteredParks = masterParks
+        .filter(p => p.city === curRegion || (curRegion === "中和" && (p.city === "中和" || p.city === "新北")))
+        .map(p => ({ ...p, dist: parseFloat(getDistanceKm(appConfig.userLat, appConfig.userLng, p.lat, p.lng)) }))
+        .sort((a, b) => a.dist - b.dist);
+
+      document.getElementById('park-distance-container').innerHTML = filteredParks.length ? filteredParks.map((p, idx) => `
         <div class="p-3 rounded-xl border border-slate-100 bg-slate-50 flex justify-between items-center my-2">
           <div>
             <div class="font-bold text-slate-800 flex items-center space-x-1">
@@ -400,14 +405,15 @@
           </div>
           <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name)}" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] shadow-sm shrink-0">🗺️ 導航</a>
         </div>
-      `).join('');
+      `).join('') : `<div class="text-center py-4 text-slate-400 text-xs">此區域暫無登記的寵物公園</div>`;
 
-      // 餐廳
-      const sortedRests = masterRestaurants.map(r => ({
-        ...r, dist: parseFloat(getDistanceKm(appConfig.userLat, appConfig.userLng, r.lat, r.lng))
-      })).sort((a, b) => a.dist - b.dist);
+      // 2. 純區域過濾 - 餐廳
+      const filteredRests = masterRestaurants
+        .filter(r => r.city === curRegion || (curRegion === "中和" && (r.city === "中和" || r.city === "新北")))
+        .map(r => ({ ...r, dist: parseFloat(getDistanceKm(appConfig.userLat, appConfig.userLng, r.lat, r.lng)) }))
+        .sort((a, b) => a.dist - b.dist);
 
-      document.getElementById('restaurant-distance-container').innerHTML = sortedRests.map((r, idx) => `
+      document.getElementById('restaurant-distance-container').innerHTML = filteredRests.length ? filteredRests.map((r, idx) => `
         <div id="rest-${idx+1}" class="p-3 rounded-xl border border-slate-100 bg-slate-50 flex justify-between items-center my-2">
           <div>
             <div class="font-bold text-slate-800 flex items-center space-x-1">
@@ -418,14 +424,15 @@
           </div>
           <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name)}" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] shadow-sm shrink-0">🗺️ 導航</a>
         </div>
-      `).join('');
+      `).join('') : `<div class="text-center py-4 text-slate-400 text-xs">此區域暫無登記的寵物餐廳</div>`;
 
-      // 醫院
-      const sortedVets = masterVets.map(v => ({
-        ...v, dist: parseFloat(getDistanceKm(appConfig.userLat, appConfig.userLng, v.lat, v.lng))
-      })).sort((a, b) => a.dist - b.dist);
+      // 3. 純區域過濾 - 醫院
+      const filteredVets = masterVets
+        .filter(v => v.city === curRegion || (curRegion === "中和" && (v.city === "中和" || v.city === "新北")))
+        .map(v => ({ ...v, dist: parseFloat(getDistanceKm(appConfig.userLat, appConfig.userLng, v.lat, v.lng)) }))
+        .sort((a, b) => a.dist - b.dist);
 
-      document.getElementById('vet-distance-container').innerHTML = sortedVets.map((v, idx) => `
+      document.getElementById('vet-distance-container').innerHTML = filteredVets.length ? filteredVets.map((v, idx) => `
         <div class="p-3 rounded-xl border border-rose-100 bg-rose-50/50 flex justify-between items-center my-2">
           <div>
             <div class="font-bold text-slate-800 flex items-center space-x-1">
@@ -436,10 +443,10 @@
           </div>
           <a href="tel:${v.phone}" class="px-2.5 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px] shadow-sm shrink-0">📞 直撥</a>
         </div>
-      `).join('');
+      `).join('') : `<div class="text-center py-4 text-slate-400 text-xs">此區域暫無登記的動物醫院</div>`;
     }
 
-    // 穿搭邏輯
+    // 穿搭與相廊邏輯
     function renderOutfitsUI() {
       const grid = document.getElementById('outfit-list-grid');
       if (!grid) return;
@@ -461,7 +468,6 @@
 
       if (!name) return alert("請輸入衣服名稱！");
       outfitsList.push({ name, color, desc });
-      localStorage.setItem('pet_app_outfits_v3', JSON.stringify(outfitsList));
       renderOutfitsUI();
       selectOutfit(name);
       toggleAddOutfitModal();
@@ -470,7 +476,6 @@
 
     function deleteOutfit(index) {
       outfitsList.splice(index, 1);
-      localStorage.setItem('pet_app_outfits_v3', JSON.stringify(outfitsList));
       renderOutfitsUI();
     }
 
@@ -482,14 +487,12 @@
       }
     }
 
-    // 相廊邏輯
     function handlePhotoUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
       const reader = new FileReader();
       reader.onload = function(e) {
         photosList.unshift(e.target.result);
-        try { localStorage.setItem('pet_app_photos_v3', JSON.stringify(photosList)); } catch (err) {}
         renderGallery();
       };
       reader.readAsDataURL(file);
@@ -512,11 +515,9 @@
 
     function deletePhoto(index) {
       photosList.splice(index, 1);
-      try { localStorage.setItem('pet_app_photos_v3', JSON.stringify(photosList)); } catch (e) {}
       renderGallery();
     }
 
-    // 健康工具
     let currentWeight = 10.0;
     function adjustWeight(val) {
       currentWeight = Math.round((currentWeight + val) * 10) / 10;
@@ -556,31 +557,17 @@
     }
 
     function rollDice() {
-      const countRest = masterRestaurants.length;
-      let count = 0;
-      const interval = setInterval(() => {
-        const randIndex = Math.floor(Math.random() * countRest);
-        masterRestaurants.forEach((_, idx) => {
-          const el = document.getElementById(`rest-${idx+1}`);
-          if (el) {
-            el.className = (idx === randIndex) 
-              ? "p-3 rounded-xl border-2 border-indigo-500 bg-indigo-50 transition flex justify-between items-center my-2" 
-              : "p-3 rounded-xl border border-slate-100 bg-slate-50 transition flex justify-between items-center my-2";
-          }
-        });
-        count++;
-        if(count > 10) clearInterval(interval);
-      }, 100);
+      const curRegion = appConfig.regionKey;
+      const filteredRests = masterRestaurants.filter(r => r.city === curRegion || (curRegion === "中和" && (r.city === "中和" || r.city === "新北")));
+      if(!filteredRests.length) return alert("當前區域暫無餐廳可選！");
+      const randIndex = Math.floor(Math.random() * filteredRests.length);
+      alert(`🎲 今日推薦：${filteredRests[randIndex].name}`);
     }
 
     window.onload = function() {
       try {
-        const savedC = localStorage.getItem('pet_app_clean_config_v3');
+        const savedC = localStorage.getItem('pet_app_strict_region_v4');
         if (savedC) appConfig = JSON.parse(savedC);
-        const savedO = localStorage.getItem('pet_app_outfits_v3');
-        if (savedO) outfitsList = JSON.parse(savedO);
-        const savedP = localStorage.getItem('pet_app_photos_v3');
-        if (savedP) photosList = JSON.parse(savedP);
       } catch(e) {}
       
       forceRenderAll();
