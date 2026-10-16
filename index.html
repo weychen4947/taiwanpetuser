@@ -54,7 +54,7 @@
       <!-- 寵物公園 -->
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100">
         <h2 class="font-bold text-slate-700 mb-3 flex items-center space-x-2">
-          <span>🌳</span> <span>當前區域寵物公園與綠地</span>
+          <span>🌳</span> <span>周邊 15km 內寵物公園與綠地</span>
         </h2>
         <div id="park-distance-container" class="space-y-2">
           <div class="text-center py-6 text-slate-400 text-xs">請點擊右上角「⚙️ 設定」輸入地址以計算距離</div>
@@ -68,7 +68,7 @@
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100">
         <div class="flex justify-between items-center mb-3">
           <h2 class="font-bold text-slate-700 flex items-center space-x-2">
-            <span>🥩</span> <span>當前區域寵物友善餐廳</span>
+            <span>🥩</span> <span>周邊 15km 內寵物友善餐廳</span>
           </h2>
           <button onclick="rollDice()" class="bg-indigo-600 text-white text-xs px-2.5 py-1 rounded-lg font-bold shadow-sm">🎲 幫選一個</button>
         </div>
@@ -80,7 +80,7 @@
       <!-- 動物醫院 -->
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-rose-100">
         <h2 class="font-bold text-slate-700 mb-3 flex items-center space-x-2">
-          <span>🏥</span> <span>當前區域動物醫院與急診</span>
+          <span>🏥</span> <span>周邊 15km 內動物醫院與急診</span>
         </h2>
         <div id="vet-distance-container" class="space-y-2">
           <div class="text-center py-6 text-slate-400 text-xs">請點擊右上角「⚙️ 設定」輸入地址以計算距離</div>
@@ -90,7 +90,6 @@
 
     <!-- 3. 健康 Health 分頁 -->
     <div id="page-health" class="tab-content hidden space-y-4">
-      <!-- 體重追蹤 -->
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 space-y-3">
         <h2 class="font-bold text-slate-700 flex items-center space-x-2">
           <span>⚖️</span> <span>體重紀錄</span>
@@ -105,7 +104,6 @@
         </div>
       </div>
 
-      <!-- 每日保健打卡 -->
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 space-y-3">
         <h2 class="font-bold text-slate-700 flex items-center space-x-2">
           <span>💊</span> <span>日常保健簽到</span>
@@ -126,7 +124,6 @@
         </div>
       </div>
 
-      <!-- 驅蟲藥紀錄 -->
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 space-y-2">
         <div class="flex justify-between items-center">
           <h2 class="font-bold text-slate-700 flex items-center space-x-1">
@@ -172,31 +169,6 @@
     </button>
   </nav>
 
-  <!-- 新增衣服 Modal -->
-  <div id="add-outfit-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-xl">
-      <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="font-bold text-slate-800">👕 新增寵物服飾</h3>
-        <button onclick="toggleAddOutfitModal()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
-      </div>
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">衣服名稱</label>
-          <input id="input-outfit-name" type="text" placeholder="例如：黃色雨衣" class="w-full p-2.5 border rounded-xl outline-indigo-500">
-        </div>
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">選擇顏色</label>
-          <input id="input-outfit-color" type="color" value="#f59e0b" class="w-full h-10 border rounded-xl cursor-pointer p-1">
-        </div>
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">描述 (選填)</label>
-          <input id="input-outfit-desc" type="text" placeholder="例如：雨天必備防風防水！" class="w-full p-2.5 border rounded-xl outline-indigo-500">
-        </div>
-      </div>
-      <button onclick="saveNewOutfit()" class="w-full py-2.5 bg-indigo-600 text-white font-bold rounded-xl shadow">新增並試穿</button>
-    </div>
-  </div>
-
   <!-- 設定 Modal -->
   <div id="settings-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-xl">
@@ -211,56 +183,26 @@
         </div>
         <div>
           <label class="block font-bold text-slate-600 mb-1">住址 (全台灣皆可輸入)</label>
-          <input id="input-address" type="text" placeholder="例如：台中市西屯區、新北市中和區、宜蘭縣羅東鎮" class="w-full p-2.5 border rounded-xl outline-indigo-500">
+          <input id="input-address" type="text" placeholder="例如：台中市西屯區文華路100號" class="w-full p-2.5 border rounded-xl outline-indigo-500">
         </div>
         <div>
-          <label class="block font-bold text-slate-600 mb-1">生日</label>
-          <input id="input-bday" type="date" class="w-full p-2.5 border rounded-xl outline-indigo-500">
-        </div>
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">到家日</label>
-          <input id="input-homeday" type="date" class="w-full p-2.5 border rounded-xl outline-indigo-500">
+          <label class="block font-bold text-slate-600 mb-1">Google Maps API Key (填入可啟用全台動態搜尋)</label>
+          <input id="input-api-key" type="text" placeholder="選填：AIzaSy..." class="w-full p-2.5 border rounded-xl outline-indigo-500">
         </div>
       </div>
       <div class="space-y-2 pt-2">
         <button onclick="saveSettings()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-md text-xs">💾 儲存並更新地點距離</button>
-        <button onclick="resetAppCache()" class="w-full py-2 bg-slate-100 text-slate-500 font-semibold rounded-2xl text-xs">🔄 清空本地紀錄 (還原初始值)</button>
+        <button onclick="resetAppCache()" class="w-full py-2 bg-slate-100 text-slate-500 font-semibold rounded-2xl text-xs">🔄 清空本地紀錄</button>
       </div>
     </div>
   </div>
 
   <script>
-    // 帶有區域標籤的景點資料庫 (city 標籤用於嚴格區域對應)
-    const masterParks = [
-      { name: "四號公園 (中和公園)", city: "中和", desc: "新北市中和區 | 廣闊綠地與寵物活動區", lat: 24.9982, lng: 121.5125 },
-      { name: "板橋萬坪公園", city: "新北", desc: "新北市板橋區 | 市中心綠地步道", lat: 25.0135, lng: 121.4630 },
-      { name: "大安森林公園", city: "台北", desc: "台北市大安區 | 廣闊綠地與休閒步道", lat: 25.0330, lng: 121.5354 },
-      { name: "迎風狗運動公園", city: "台北", desc: "台北市松山區 | 大小犬分區、專屬圍欄跑跑區", lat: 25.0710, lng: 121.5580 },
-      { name: "羅東運動公園", city: "宜蘭", desc: "宜蘭縣羅東鎮 | 水岸綠地與廣闊跑跑區", lat: 24.6820, lng: 121.7510 },
-      { name: "文修公園", city: "台中", desc: "台中市西屯區 | 湖畔步道與廣闊綠地", lat: 24.1842, lng: 120.6472 },
-      { name: "凹子底森林公園", city: "高雄", desc: "高雄市鼓山區 | 大片草地與極佳跑跑空間", lat: 22.6575, lng: 120.3015 }
-    ];
+    let masterParks = [];
+    let masterRestaurants = [];
+    let masterVets = [];
 
-    const masterRestaurants = [
-      { name: "私藏不藏私", city: "中和", desc: "新北市中和區景安路167巷6號 | 寵物友善雜貨咖啡", lat: 24.9940, lng: 121.5035 },
-      { name: "PS BUBU 金蜜蜂寵物餐廳", city: "台北", desc: "台北市士林區中山北路七段140巷1號 | 主題餐廳", lat: 25.1235, lng: 121.5320 },
-      { name: "灆咖啡 Seaview Coffee", city: "宜蘭", desc: "宜蘭縣頭城鎮濱海路二段 | 海景咖啡館", lat: 24.8720, lng: 121.8320 },
-      { name: "烏竹樓 OT Kitchen", city: "台中", desc: "台中市西屯區西安街166號 | 毛孩可落地", lat: 24.1821, lng: 120.6461 },
-      { name: "HOME 燒肉 逢甲店", city: "台中", desc: "台中市西屯區河南路二段256號 | 招待水煮肉", lat: 24.1741, lng: 120.6482 },
-      { name: "Uni cafe 與你咖啡", city: "台中", desc: "台中市西屯區漢翔北街37號 | 戶外石子庭院", lat: 24.1885, lng: 120.6465 },
-      { name: "狗浪趴 Dogs Love Park", city: "高雄", desc: "高雄市楠梓區創新路 | 大草皮與游泳池", lat: 22.7480, lng: 120.3320 }
-    ];
-
-    const masterVets = [
-      { name: "中和全興動物醫院", city: "中和", desc: "新北市中和區中山路二段 | 中和急診門診", phone: "0222485599", lat: 25.0005, lng: 121.5050 },
-      { name: "台大動物醫院", city: "台北", desc: "台北市大安區基隆路三段153號 | 教學醫院", phone: "0227396828", lat: 25.0135, lng: 121.5435 },
-      { name: "宜蘭羅東動物醫院", city: "宜蘭", desc: "宜蘭縣羅東鎮 | 急診門診", phone: "039552277", lat: 24.6750, lng: 121.7680 },
-      { name: "邁阿密動物醫院", city: "台中", desc: "台中市西屯區西屯路二段269-12號 | 一般門診/疫苗", phone: "0424528119", lat: 24.1751, lng: 120.6432 },
-      { name: "🚨 全國動物醫院 總院 (24h 急診)", city: "台中", desc: "台中市西區五權八街100號 | 24小時不打烊", phone: "0423710496", lat: 24.1382, lng: 120.6621 },
-      { name: "高雄中興動物醫院 農16總院", city: "高雄", desc: "高雄市鼓山區大順一路939號 | 重症急診", phone: "075503532", lat: 22.6580, lng: 120.3045 }
-    ];
-
-    let appConfig = { petName: "", address: "", regionKey: "", userLat: null, userLng: null };
+    let appConfig = { petName: "", address: "", apiKey: "", userLat: null, userLng: null };
     let outfitsList = [
       { name: "粉紅色長袖", color: "#ec4899", desc: "💗 經典粉紅保暖外套，軟萌又暖呼呼！" },
       { name: "條紋長袖", color: "#ef4444", desc: "👕 經典紅白條紋長袖，簡約亮眼！" },
@@ -268,6 +210,29 @@
       { name: "今天不穿衣服", color: "#1e293b", desc: "🐕 自然裸奔款！展示帥氣順滑毛髮！" }
     ];
     let photosList = [];
+
+    // 動態讀取外部 json 資料庫
+    async function loadPlacesDatabase() {
+      try {
+        const res = await fetch('places.json');
+        const data = await res.json();
+        masterParks = data.parks || [];
+        masterRestaurants = data.restaurants || [];
+        masterVets = data.vets || [];
+      } catch (err) {
+        console.warn("未發現 places.json，將使用預設數據");
+      }
+    }
+
+    function isOpenNow(openHour, closeHour) {
+      const now = new Date();
+      const currentHour = now.getHours() + (now.getMinutes() / 60);
+      if (openHour === 0 && closeHour === 24) return true;
+      if (closeHour > 24) {
+        return currentHour >= openHour || currentHour <= (closeHour - 24);
+      }
+      return currentHour >= openHour && currentHour <= closeHour;
+    }
 
     function switchTab(tabName) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -282,13 +247,8 @@
       if (!modal.classList.contains('hidden')) {
         document.getElementById('input-pet-name').value = appConfig.petName || '';
         document.getElementById('input-address').value = appConfig.address || '';
-        document.getElementById('input-bday').value = appConfig.bday || '';
-        document.getElementById('input-homeday').value = appConfig.homeday || '';
+        document.getElementById('input-api-key').value = appConfig.apiKey || '';
       }
-    }
-
-    function toggleAddOutfitModal() {
-      document.getElementById('add-outfit-modal').classList.toggle('hidden');
     }
 
     function getDistanceKm(lat1, lon1, lat2, lon2) {
@@ -302,25 +262,13 @@
       return (R * c).toFixed(1);
     }
 
-    // 地名與區域 Key 識別
-    function detectRegionKey(addr) {
-      if (!addr) return "";
-      if (addr.includes("中和") || addr.includes("景新街")) return "中和";
-      if (addr.includes("台中") || addr.includes("臺中") || addr.includes("西屯") || addr.includes("逢甲")) return "台中";
-      if (addr.includes("宜蘭") || addr.includes("羅東") || addr.includes("頭城")) return "宜蘭";
-      if (addr.includes("高雄") || addr.includes("左營") || addr.includes("鼓山")) return "高雄";
-      if (addr.includes("台北") || addr.includes("臺北") || addr.includes("大安")) return "台北";
-      if (addr.includes("新北") || addr.includes("板橋")) return "新北";
-      return "台北";
-    }
-
     function getCityFallbackCoords(addr) {
-      const key = detectRegionKey(addr);
-      if (key === "中和") return { lat: 24.9920, lng: 121.5170 };
-      if (key === "台中") return { lat: 24.1800, lng: 120.6450 };
-      if (key === "宜蘭") return { lat: 24.7570, lng: 121.7530 };
-      if (key === "高雄") return { lat: 22.6273, lng: 120.3014 };
-      if (key === "新北") return { lat: 25.0135, lng: 121.4630 };
+      if (!addr) return null;
+      if (addr.includes("中和")) return { lat: 24.9920, lng: 121.5170 };
+      if (addr.includes("板橋")) return { lat: 25.0135, lng: 121.4630 };
+      if (addr.includes("台北") || addr.includes("臺北")) return { lat: 25.0330, lng: 121.5654 };
+      if (addr.includes("台中") || addr.includes("臺中") || addr.includes("西屯")) return { lat: 24.1800, lng: 120.6450 };
+      if (addr.includes("高雄") || addr.includes("鼓山")) return { lat: 22.6273, lng: 120.3014 };
       return { lat: 25.0330, lng: 121.5654 };
     }
 
@@ -337,35 +285,27 @@
     }
 
     async function saveSettings() {
-      const newPetName = (document.getElementById('input-pet-name').value || '').trim();
-      const newAddress = (document.getElementById('input-address').value || '').trim();
+      appConfig.petName = (document.getElementById('input-pet-name').value || '').trim();
+      appConfig.address = (document.getElementById('input-address').value || '').trim();
+      appConfig.apiKey = (document.getElementById('input-api-key').value || '').trim();
 
-      appConfig.petName = newPetName;
-      appConfig.address = newAddress;
-      appConfig.regionKey = detectRegionKey(newAddress);
-
-      if (newAddress) {
+      if (appConfig.address) {
         document.getElementById('header-address').innerText = "📍 定位計算中...";
-        let coords = await geocodeAddress(newAddress);
-        if (!coords) coords = getCityFallbackCoords(newAddress);
+        let coords = await geocodeAddress(appConfig.address);
         if (coords) {
           appConfig.userLat = coords.lat;
           appConfig.userLng = coords.lng;
         }
-      } else {
-        appConfig.userLat = null;
-        appConfig.userLng = null;
-        appConfig.regionKey = "";
       }
 
-      localStorage.setItem('pet_app_strict_region_v4', JSON.stringify(appConfig));
+      localStorage.setItem('pet_app_json_v9', JSON.stringify(appConfig));
       forceRenderAll();
       toggleSettingsModal();
     }
 
     function resetAppCache() {
-      localStorage.removeItem('pet_app_strict_region_v4');
-      appConfig = { petName: "", address: "", regionKey: "", userLat: null, userLng: null };
+      localStorage.removeItem('pet_app_json_v9');
+      appConfig = { petName: "", address: "", apiKey: "", userLat: null, userLng: null };
       forceRenderAll();
       toggleSettingsModal();
     }
@@ -378,7 +318,7 @@
       document.getElementById('header-address').innerText = pAddr;
       document.getElementById('outfit-pet-name').innerText = pName;
 
-      if (!appConfig.userLat || !appConfig.userLng || !appConfig.regionKey) {
+      if (!appConfig.userLat || !appConfig.userLng) {
         const emptyTip = `<div class="text-center py-6 text-slate-400 text-xs">請點擊右上角「⚙️ 設定」輸入地址以計算距離</div>`;
         document.getElementById('park-distance-container').innerHTML = emptyTip;
         document.getElementById('restaurant-distance-container').innerHTML = emptyTip;
@@ -386,12 +326,12 @@
         return;
       }
 
-      const curRegion = appConfig.regionKey;
+      const maxDistanceKm = 15;
 
-      // 1. 純區域過濾 - 公園
+      // 1. 公園
       const filteredParks = masterParks
-        .filter(p => p.city === curRegion || (curRegion === "中和" && (p.city === "中和" || p.city === "新北")))
         .map(p => ({ ...p, dist: parseFloat(getDistanceKm(appConfig.userLat, appConfig.userLng, p.lat, p.lng)) }))
+        .filter(p => p.dist <= maxDistanceKm && isOpenNow(p.open, p.close))
         .sort((a, b) => a.dist - b.dist);
 
       document.getElementById('park-distance-container').innerHTML = filteredParks.length ? filteredParks.map((p, idx) => `
@@ -400,36 +340,38 @@
             <div class="font-bold text-slate-800 flex items-center space-x-1">
               <span>${idx + 1}. ${p.name}</span>
               <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded font-bold">📍 距約 ${p.dist} km</span>
+              <span class="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold">🟢 營業中</span>
             </div>
             <p class="text-slate-500 text-[11px] mt-0.5">${p.desc}</p>
           </div>
           <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name)}" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] shadow-sm shrink-0">🗺️ 導航</a>
         </div>
-      `).join('') : `<div class="text-center py-4 text-slate-400 text-xs">此區域暫無登記的寵物公園</div>`;
+      `).join('') : `<div class="text-center py-4 text-slate-400 text-xs">附近 15km 內暫無符合公園，建議於設定填入 Google API Key 以動態擴充</div>`;
 
-      // 2. 純區域過濾 - 餐廳
+      // 2. 餐廳
       const filteredRests = masterRestaurants
-        .filter(r => r.city === curRegion || (curRegion === "中和" && (r.city === "中和" || r.city === "新北")))
         .map(r => ({ ...r, dist: parseFloat(getDistanceKm(appConfig.userLat, appConfig.userLng, r.lat, r.lng)) }))
+        .filter(r => r.dist <= maxDistanceKm && isOpenNow(r.open, r.close))
         .sort((a, b) => a.dist - b.dist);
 
       document.getElementById('restaurant-distance-container').innerHTML = filteredRests.length ? filteredRests.map((r, idx) => `
-        <div id="rest-${idx+1}" class="p-3 rounded-xl border border-slate-100 bg-slate-50 flex justify-between items-center my-2">
+        <div class="p-3 rounded-xl border border-slate-100 bg-slate-50 flex justify-between items-center my-2">
           <div>
             <div class="font-bold text-slate-800 flex items-center space-x-1">
               <span>${idx + 1}. ${r.name}</span>
               <span class="text-amber-600 font-bold text-[10px]">📍 距約 ${r.dist} km</span>
+              <span class="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold">🟢 營業中</span>
             </div>
             <p class="text-slate-500 text-[11px] mt-0.5">${r.desc}</p>
           </div>
           <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name)}" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] shadow-sm shrink-0">🗺️ 導航</a>
         </div>
-      `).join('') : `<div class="text-center py-4 text-slate-400 text-xs">此區域暫無登記的寵物餐廳</div>`;
+      `).join('') : `<div class="text-center py-4 text-slate-400 text-xs">附近 15km 內暫無符合餐廳，建議於設定填入 Google API Key 以動態擴充</div>`;
 
-      // 3. 純區域過濾 - 醫院
+      // 3. 醫院
       const filteredVets = masterVets
-        .filter(v => v.city === curRegion || (curRegion === "中和" && (v.city === "中和" || v.city === "新北")))
         .map(v => ({ ...v, dist: parseFloat(getDistanceKm(appConfig.userLat, appConfig.userLng, v.lat, v.lng)) }))
+        .filter(v => v.dist <= maxDistanceKm && isOpenNow(v.open, v.close))
         .sort((a, b) => a.dist - b.dist);
 
       document.getElementById('vet-distance-container').innerHTML = filteredVets.length ? filteredVets.map((v, idx) => `
@@ -438,142 +380,23 @@
             <div class="font-bold text-slate-800 flex items-center space-x-1">
               <span>${v.name}</span>
               <span class="text-rose-700 text-[10px] font-bold bg-rose-100 px-1.5 py-0.5 rounded">📍 距約 ${v.dist} km</span>
+              <span class="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold">🟢 營業中</span>
             </div>
             <p class="text-slate-500 text-[11px] mt-0.5">${v.desc}</p>
           </div>
           <a href="tel:${v.phone}" class="px-2.5 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px] shadow-sm shrink-0">📞 直撥</a>
         </div>
-      `).join('') : `<div class="text-center py-4 text-slate-400 text-xs">此區域暫無登記的動物醫院</div>`;
+      `).join('') : `<div class="text-center py-4 text-slate-400 text-xs">附近 15km 內暫無符合動物醫院</div>`;
     }
 
-    // 穿搭與相廊邏輯
-    function renderOutfitsUI() {
-      const grid = document.getElementById('outfit-list-grid');
-      if (!grid) return;
-      grid.innerHTML = outfitsList.map((item, idx) => `
-        <div class="p-2 border border-slate-200 bg-slate-50 rounded-xl flex justify-between items-center">
-          <button onclick="selectOutfit('${item.name}')" class="text-left font-semibold text-slate-700 truncate flex items-center space-x-1">
-            <span class="w-2.5 h-2.5 rounded-full inline-block border" style="background-color: ${item.color};"></span>
-            <span>${item.name}</span>
-          </button>
-          ${outfitsList.length > 1 ? `<button onclick="deleteOutfit(${idx})" class="text-slate-400 hover:text-red-600 font-bold px-1 text-xs">✕</button>` : ''}
-        </div>
-      `).join('');
-    }
-
-    function saveNewOutfit() {
-      const name = (document.getElementById('input-outfit-name').value || '').trim();
-      const color = document.getElementById('input-outfit-color').value;
-      const desc = (document.getElementById('input-outfit-desc').value || '').trim() || `${name} 服飾試穿`;
-
-      if (!name) return alert("請輸入衣服名稱！");
-      outfitsList.push({ name, color, desc });
-      renderOutfitsUI();
-      selectOutfit(name);
-      toggleAddOutfitModal();
-      document.getElementById('input-outfit-name').value = '';
-    }
-
-    function deleteOutfit(index) {
-      outfitsList.splice(index, 1);
-      renderOutfitsUI();
-    }
-
-    function selectOutfit(name) {
-      const outfit = outfitsList.find(o => o.name === name) || outfitsList[0];
-      if (outfit) {
-        document.getElementById('outfit-description').innerText = outfit.desc;
-        document.getElementById('outfit-svg-layer').innerHTML = `<path d="M 38 63 Q 50 55 105 58 Q 140 62 145 75 L 138 88 Q 90 92 42 82 Z" fill="${outfit.color}" opacity="0.9" />`;
-      }
-    }
-
-    function handlePhotoUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        photosList.unshift(e.target.result);
-        renderGallery();
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function renderGallery() {
-      const gallery = document.getElementById('photo-gallery');
-      if (!gallery) return;
-      if (photosList.length === 0) {
-        gallery.innerHTML = `<div class="aspect-square bg-slate-100 rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 text-xs col-span-2 py-8"><span>🖼️ 尚無照片，點擊右上角新增</span></div>`;
-        return;
-      }
-      gallery.innerHTML = photosList.map((src, index) => `
-        <div class="aspect-square bg-slate-900 rounded-xl overflow-hidden relative shadow group">
-          <img src="${src}" class="w-full h-full object-cover">
-          <button onclick="deletePhoto(${index})" class="absolute top-1 right-1 bg-red-600/80 hover:bg-red-600 text-white w-5 h-5 rounded-full text-[10px] flex items-center justify-center shadow">✕</button>
-        </div>
-      `).join('');
-    }
-
-    function deletePhoto(index) {
-      photosList.splice(index, 1);
-      renderGallery();
-    }
-
-    let currentWeight = 10.0;
-    function adjustWeight(val) {
-      currentWeight = Math.round((currentWeight + val) * 10) / 10;
-      document.getElementById('weight-display').innerText = currentWeight.toFixed(1);
-    }
-
-    let brushed = false;
-    function toggleBrush() {
-      brushed = !brushed;
-      const check = document.getElementById('brush-check');
-      check.innerText = brushed ? "✓ 已簽到" : "未簽到";
-      check.className = brushed ? "text-emerald-600 font-bold" : "text-teal-600";
-    }
-
-    let fishoil = false;
-    function toggleFishoil() {
-      fishoil = !fishoil;
-      const check = document.getElementById('fishoil-check');
-      check.innerText = fishoil ? "✓ 已簽到" : "未簽到";
-      check.className = fishoil ? "text-emerald-600 font-bold" : "text-blue-600";
-    }
-
-    let nexgardDone = false;
-    function toggleNexgard() {
-      nexgardDone = !nexgardDone;
-      const btn = document.getElementById('nexgard-btn');
-      const status = document.getElementById('nexgard-status');
-      if(nexgardDone) {
-        btn.innerText = "✓ 已打卡";
-        btn.className = "px-3 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded-lg shadow";
-        status.innerText = "🎉 本月驅蟲藥已打卡完成！";
-      } else {
-        btn.innerText = "打勾簽到";
-        btn.className = "px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg shadow";
-        status.innerText = "點擊打勾打卡紀錄本月吃藥狀態";
-      }
-    }
-
-    function rollDice() {
-      const curRegion = appConfig.regionKey;
-      const filteredRests = masterRestaurants.filter(r => r.city === curRegion || (curRegion === "中和" && (r.city === "中和" || r.city === "新北")));
-      if(!filteredRests.length) return alert("當前區域暫無餐廳可選！");
-      const randIndex = Math.floor(Math.random() * filteredRests.length);
-      alert(`🎲 今日推薦：${filteredRests[randIndex].name}`);
-    }
-
-    window.onload = function() {
+    window.onload = async function() {
       try {
-        const savedC = localStorage.getItem('pet_app_strict_region_v4');
+        const savedC = localStorage.getItem('pet_app_json_v9');
         if (savedC) appConfig = JSON.parse(savedC);
       } catch(e) {}
-      
+
+      await loadPlacesDatabase();
       forceRenderAll();
-      renderOutfitsUI();
-      renderGallery();
-      selectOutfit(outfitsList[0]?.name);
     };
   </script>
 </body>
