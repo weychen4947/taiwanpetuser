@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>毛孩幸福日常隨身 App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .nav-active { color: #4f46e5; font-weight: bold; }
+  </style>
+</head>
+<body class="bg-amber-50 text-slate-800 min-h-screen pb-20">
+
+  <!-- 頂部 Header -->
+  <header class="bg-indigo-600 text-white p-4 shadow-md sticky top-0 z-10 flex justify-between items-center">
+    <div>
+      <h1 id="header-title" class="font-bold text-lg flex items-center space-x-2">
+        <span>🐾</span> <span id="header-pet-name">毛孩隨身 App</span>
+      </h1>
+      <p id="header-address" class="text-xs text-indigo-100 mt-0.5">尚未設定地址 (點擊右上角⚙️設定)</p>
+    </div>
+    <button onclick="toggleSettingsModal()" class="bg-indigo-500 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold border border-indigo-400 shadow-sm flex items-center space-x-1">
+      <span>⚙️</span> <span>設定</span>
+    </button>
+  </header>
+
+  <!-- 主內容區域 -->
+  <main class="max-w-md mx-auto p-4 space-y-4">
+
+    <!-- 1. 散步 Walking 分頁 -->
+    <div id="page-walking" class="tab-content space-y-4">
+      <!-- 穿搭卡片 -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="font-bold text-slate-700 flex items-center space-x-1">
+            <span>👕</span> <span><span id="outfit-pet-name">毛孩</span> 的今日穿搭</span>
+          </h2>
+          <button onclick="toggleAddOutfitModal()" class="text-xs text-indigo-600 font-bold hover:underline">+ 新增衣服</button>
+        </div>
+        
+        <div class="flex items-center space-x-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
+          <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center relative overflow-hidden shrink-0 border border-amber-200">
+            <span class="text-2xl">🐕</span>
+            <svg id="outfit-svg-layer" class="absolute inset-0 w-full h-full" viewBox="0 0 200 200"></svg>
+          </div>
+          <div>
+            <p id="outfit-description" class="text-xs text-slate-600 font-medium">請選擇衣服或試穿新衣服！</p>
+          </div>
+        </div>
+
+        <div id="outfit-list-grid" class="grid grid-cols-2 gap-2 text-xs"></div>
+      </div>
+
+      <!-- 寵物公園 -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100">
+        <h2 class="font-bold text-slate-700 mb-3 flex items-center space-x-2">
+          <span>🌳</span> <span>周邊寵物公園與綠地 (由近至遠)</span>
+        </h2>
+        <div id="park-distance-container" class="space-y-2">
+          <div class="text-center py-6 text-slate-400 text-xs">請點擊右上角「⚙️ 設定」輸入地址以計算距離</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 生活 Life 分頁 -->
+    <div id="page-life" class="tab-content hidden space-y-4">
+      <!-- 寵物友善餐廳 -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-bold text-slate-700 flex items-center space-x-2">
+            <span>🥩</span> <span>周邊寵物友善餐廳 (由近至遠)</span>
+          </h2>
+          <button onclick="rollDice()" class="bg-indigo-600 text-white text-xs px-2.5 py-1 rounded-lg font-bold shadow-sm">🎲 幫選一個</button>
+        </div>
+        <div id="restaurant-distance-container" class="space-y-2">
+          <div class="text-center py-6 text-slate-400 text-xs">請點擊右上角「⚙️ 設定」輸入地址以計算距離</div>
+        </div>
+      </div>
+
+      <!-- 動物醫院 -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-rose-100">
+        <h2 class="font-bold text-slate-700 mb-3 flex items-center space-x-2">
+          <span>🏥</span> <span>周邊動物醫院與 24h 急診 (由近至遠)</span>
+        </h2>
+        <div id="vet-distance-container" class="space-y-2">
+          <div class="text-center py-6 text-slate-400 text-xs">請點擊右上角「⚙️ 設定」輸入地址以計算距離</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 健康 Health 分頁 -->
+    <div id="page-health" class="tab-content hidden space-y-4">
+      <!-- 體重追蹤 -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 space-y-3">
+        <h2 class="font-bold text-slate-700 flex items-center space-x-2">
+          <span>⚖️</span> <span>體重紀錄</span>
+        </h2>
+        <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl">
+          <span class="text-xs text-slate-500">目前體重：</span>
+          <div class="flex items-center space-x-2">
+            <button onclick="adjustWeight(-0.1)" class="w-7 h-7 bg-white border rounded-lg font-bold text-slate-600 shadow-sm">-</button>
+            <span id="weight-display" class="font-bold text-lg text-indigo-600">10.0</span> <span class="text-xs text-slate-500">kg</span>
+            <button onclick="adjustWeight(0.1)" class="w-7 h-7 bg-white border rounded-lg font-bold text-slate-600 shadow-sm">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 每日保健打卡 -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 space-y-3">
+        <h2 class="font-bold text-slate-700 flex items-center space-x-2">
+          <span>💊</span> <span>日常保健簽到</span>
+        </h2>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <button onclick="toggleBrush()" class="p-3 bg-teal-50 border border-teal-100 rounded-xl text-left flex justify-between items-center">
+            <div>
+              <div class="font-bold text-teal-800">🪥 晚上刷牙</div>
+              <p id="brush-check" class="text-teal-600 font-bold mt-0.5">未簽到</p>
+            </div>
+          </button>
+          <button onclick="toggleFishoil()" class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-left flex justify-between items-center">
+            <div>
+              <div class="font-bold text-blue-800">🐟 魚油保養</div>
+              <p id="fishoil-check" class="text-blue-600 font-bold mt-0.5">未簽到</p>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- 驅蟲藥紀錄 -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 space-y-2">
+        <div class="flex justify-between items-center">
+          <h2 class="font-bold text-slate-700 flex items-center space-x-1">
+            <span>🛡️</span> <span>本月驅蟲藥紀錄</span>
+          </h2>
+          <button id="nexgard-btn" onclick="toggleNexgard()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg shadow">打勾簽到</button>
+        </div>
+        <p id="nexgard-status" class="text-xs text-slate-500">點擊打勾打卡紀錄本月吃藥狀態</p>
+      </div>
+    </div>
+
+    <!-- 4. 相片 Gallery 分頁 -->
+    <div id="page-gallery" class="tab-content hidden space-y-4">
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="font-bold text-slate-700 flex items-center space-x-2">
+            <span>🖼️</span> <span>毛孩生活相廊</span>
+          </h2>
+          <label class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-1.5 rounded-xl font-bold cursor-pointer shadow-sm">
+            + 上傳照片
+            <input type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)">
+          </label>
+        </div>
+        <div id="photo-gallery" class="grid grid-cols-2 gap-2"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 底部導覽列 -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-4 py-2 flex justify-around items-center text-xs text-slate-400 z-10">
+    <button id="nav-walking" onclick="switchTab('walking')" class="nav-item nav-active flex flex-col items-center">
+      <span class="text-lg">🐕</span> <span>散步 Walking</span>
+    </button>
+    <button id="nav-life" onclick="switchTab('life')" class="nav-item flex flex-col items-center">
+      <span class="text-lg">🍖</span> <span>生活 Life</span>
+    </button>
+    <button id="nav-health" onclick="switchTab('health')" class="nav-item flex flex-col items-center">
+      <span class="text-lg">💊</span> <span>健康 Health</span>
+    </button>
+    <button id="nav-gallery" onclick="switchTab('gallery')" class="nav-item flex flex-col items-center">
+      <span class="text-lg">📸</span> <span>相廊 Gallery</span>
+    </button>
+  </nav>
+
+  <!-- 新增衣服 Modal -->
+  <div id="add-outfit-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-xl">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-slate-800">👕 新增寵物服飾</h3>
+        <button onclick="toggleAddOutfitModal()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">衣服名稱</label>
+          <input id="input-outfit-name" type="text" placeholder="例如：黃色雨衣" class="w-full p-2.5 border rounded-xl outline-indigo-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">選擇顏色</label>
+          <input id="input-outfit-color" type="color" value="#f59e0b" class="w-full h-10 border rounded-xl cursor-pointer p-1">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">描述 (選填)</label>
+          <input id="input-outfit-desc" type="text" placeholder="例如：雨天必備防風防水！" class="w-full p-2.5 border rounded-xl outline-indigo-500">
+        </div>
+      </div>
+      <button onclick="saveNewOutfit()" class="w-full py-2.5 bg-indigo-600 text-white font-bold rounded-xl shadow">新增並試穿</button>
+    </div>
+  </div>
+
+  <!-- 設定 Modal -->
+  <div id="settings-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-xl">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-slate-800">⚙️ 寵物與住址設定</h3>
+        <button onclick="toggleSettingsModal()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">寶貝名字</label>
+          <input id="input-pet-name" type="text" placeholder="例如：幸運毛孩" class="w-full p-2.5 border rounded-xl outline-indigo-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">住址 (全台灣皆可輸入)</label>
+          <input id="input-address" type="text" placeholder="例如：新北市中和區景新街410巷18號" class="w-full p-2.5 border rounded-xl outline-indigo-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">生日</label>
+          <input id="input-bday" type="date" class="w-full p-2.5 border rounded-xl outline-indigo-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">到家日</label>
+          <input id="input-homeday" type="date" class="w-full p-2.5 border rounded-xl outline-indigo-500">
+        </div>
+      </div>
+      <div class="space-y-2 pt-2">
+        <button onclick="saveSettings()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-md text-xs">💾 儲存並更新地點距離</button>
+        <button onclick="resetAppCache()" class="w-full py-2 bg-slate-100 text-slate-500 font-semibold rounded-2xl text-xs">🔄 清空本地紀錄 (還原初始值)</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 全台灣 22 縣市寵物公園
+    const masterParks = [
+      { name: "四號公園 (中和公園)", desc: "新北市中和區 | 廣闊綠地與寵物活動區", lat: 24.9982, lng: 121.5125 },
+      { name: "板橋萬坪公園", desc: "新北市板橋區 | 市中心綠地步道", lat: 25.0135, lng: 121.4630 },
+      { name: "大安森林公園", desc: "台北市大安區 | 廣闊綠地與休閒步道", lat: 25.0330, lng: 121.5354 },
+      { name: "迎風狗運動公園", desc: "台北市松山區 | 大小犬分區、專屬圍欄跑跑區", lat: 25.0710, lng: 121.5580 },
+      { name: "羅東運動公園", desc: "宜蘭縣羅東鎮 | 水岸綠地與廣闊跑跑區", lat: 24.6820, lng: 121.7510 },
+      { name: "文修公園", desc: "台中市西屯區 | 湖畔步道與廣闊綠地", lat: 24.1842, lng: 120.6472 },
+      { name: "凹子底森林公園", desc: "高雄市鼓山區 | 大片草地與極佳跑跑空間", lat: 22.6575, lng: 120.3015 }
+    ];
+
+    // 全台灣寵物餐廳
+    const masterRestaurants = [
+      { name: "私藏不藏私", desc: "新北市中和區景安路167巷6號 | 寵物友善雜貨咖啡", lat: 24.9940, lng: 121.5035 },
+      { name: "PS BUBU 金蜜蜂寵物餐廳", desc: "台北市士林區中山北路七段140巷1號 | 主題餐廳", lat: 25.1235, lng: 121.5320 },
+      { name: "灆咖啡 Seaview Coffee", desc: "宜蘭縣頭城鎮濱海路二段 | 海景咖啡館", lat: 24.8720, lng: 121.8320 },
+      { name: "烏竹樓 OT Kitchen", desc: "台中市西屯區西安街166號 | 毛孩可落地", lat: 24.1821, lng: 120.6461 },
+      { name: "HOME 燒肉 逢甲店", desc: "台中市西屯區河南路二段256號 | 招待水煮肉", lat: 24.1741, lng: 120.6482 },
+      { name: "狗浪趴 Dogs Love Park", desc: "高雄市楠梓區創新路 | 大草皮與游泳池", lat: 22.7480, lng: 120.3320 }
+    ];
+
+    // 全台灣動物醫院
+    const masterVets = [
+      { name: "中和全興動物醫院", desc: "新北市中和區中山路二段 | 中和急診門診", phone: "0222485599", lat: 25.0005, lng: 121.5050 },
+      { name: "台大動物醫院", desc: "台北市大安區基隆路三段153號 | 教學醫院", phone: "0227396828", lat: 25.0135, lng: 121.5435 },
+      { name: "宜蘭羅東動物醫院", desc: "宜蘭縣羅東鎮 | 急診門診", phone: "039552277", lat: 24.6750, lng: 121.7680 },
+      { name: "邁阿密動物醫院", desc: "台中市西屯區西屯路二段269-12號 | 一般門診/疫苗", phone: "0424528119", lat: 24.1751, lng: 120.6432 },
+      { name: "🚨 全國動物醫院 總院 (24h 急診)", desc: "台中市西區五權八街100號 | 24小時不打烊", phone: "0423710496", lat: 24.1382, lng: 120.6621 },
+      { name: "高雄中興動物醫院 農16總院", desc: "高雄市鼓山區大順一路939號 | 重症急診", phone: "075503532", lat: 22.6580, lng: 120.3045 }
+    ];
+
+    let appConfig = { petName: "", address: "", bday: "", homeday: "", userLat: null, userLng: null };
+    let outfitsList = [
+      { name: "粉紅色長袖", color: "#ec4899", desc: "💗 經典粉紅保暖外套，軟萌又暖呼呼！" },
+      { name: "條紋長袖", color: "#ef4444", desc: "👕 經典紅白條紋長袖，簡約亮眼！" },
+      { name: "無袖涼感衣", color: "#06b6d4", desc: "❄️ 薄荷綠防曬涼感背心，透氣排汗首選！" },
+      { name: "今天不穿衣服", color: "#1e293b", desc: "🐕 自然裸奔款！展示帥氣順滑毛髮！" }
+    ];
+    let photosList = [];
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-active'));
+      document.getElementById(`page-${tabName}`).classList.remove('hidden');
+      document.getElementById(`nav-${tabName}`).classList.add('nav-active');
+    }
+
+    function toggleSettingsModal() {
+      const modal = document.getElementById('settings-modal');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        document.getElementById('input-pet-name').value = appConfig.petName || '';
+        document.getElementById('input-address').value = appConfig.address || '';
+        document.getElementById('input-bday').value = appConfig.bday || '';
+        document.getElementById('input-homeday').value = appConfig.homeday || '';
+      }
+    }
+
+    function toggleAddOutfitModal() {
+      document.getElementById('add-outfit-modal').classList.toggle('hidden');
+    }
+
+    function getDistanceKm(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return (R * c).toFixed(1);
+    }
+
+    function getCityFallbackCoords(addr) {
+      if (!addr) return null;
+      if (addr.includes("中和") || addr.includes("景新街")) return { lat: 24.9920, lng: 121.5170 };
+      if (addr.includes("永和")) return { lat: 25.0080, lng: 121.5150 };
+      if (addr.includes("板橋")) return { lat: 25.0135, lng: 121.4630 };
+      if (addr.includes("新北")) return { lat: 25.0135, lng: 121.4630 };
+      if (addr.includes("台北") || addr.includes("臺北") || addr.includes("大安")) return { lat: 25.0330, lng: 121.5654 };
+      if (addr.includes("宜蘭") || addr.includes("羅東")) return { lat: 24.7570, lng: 121.7530 };
+      if (addr.includes("台中") || addr.includes("臺中") || addr.includes("西屯")) return { lat: 24.1800, lng: 120.6450 };
+      if (addr.includes("高雄")) return { lat: 22.6273, lng: 120.3014 };
+      return { lat: 25.0330, lng: 121.5654 };
+    }
+
+    async function geocodeAddress(addressText) {
+      if (!addressText) return null;
+      try {
+        const query = addressText.includes("台灣") ? addressText : `台灣${addressText}`;
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+        const res = await fetch(url, { headers: { 'Accept-Language': 'zh-TW' } });
+        const data = await res.json();
+        if (data && data.length > 0) return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+      } catch (err) {}
+      return getCityFallbackCoords(addressText);
+    }
+
+    async function saveSettings() {
+      const newPetName = (document.getElementById('input-pet-name').value || '').trim();
+      const newAddress = (document.getElementById('input-address').value || '').trim();
+      const newBday = (document.getElementById('input-bday').value || '').trim();
+      const newHomeday = (document.getElementById('input-homeday').value || '').trim();
+
+      appConfig.petName = newPetName;
+      appConfig.address = newAddress;
+      appConfig.bday = newBday;
+      appConfig.homeday = newHomeday;
+
+      if (newAddress) {
+        document.getElementById('header-address').innerText = "📍 定位計算中...";
+        let coords = await geocodeAddress(newAddress);
+        if (!coords) coords = getCityFallbackCoords(newAddress);
+        if (coords) {
+          appConfig.userLat = coords.lat;
+          appConfig.userLng = coords.lng;
+        }
+      } else {
+        appConfig.userLat = null;
+        appConfig.userLng = null;
+      }
+
+      localStorage.setItem('pet_app_clean_config_v3', JSON.stringify(appConfig));
+      forceRenderAll();
+      toggleSettingsModal();
+    }
+
+    function resetAppCache() {
+      localStorage.removeItem('pet_app_clean_config_v3');
+      localStorage.removeItem('pet_app_outfits_v3');
+      localStorage.removeItem('pet_app_photos_v3');
+      appConfig = { petName: "", address: "", bday: "", homeday: "", userLat: null, userLng: null };
+      forceRenderAll();
+      renderOutfitsUI();
+      renderGallery();
+      toggleSettingsModal();
+    }
+
+    function forceRenderAll() {
+      const pName = appConfig.petName || "毛孩";
+      const pAddr = appConfig.address || "尚未設定地址 (點擊右上角⚙️設定)";
+
+      document.getElementById('header-pet-name').innerText = appConfig.petName ? `${pName}的隨身 App` : "毛孩隨身 App";
+      document.getElementById('header-address').innerText = pAddr;
+      document.getElementById('outfit-pet-name').innerText = pName;
+
+      if (!appConfig.userLat || !appConfig.userLng) {
+        const emptyTip = `<div class="text-center py-6 text-slate-400 text-xs">請點擊右上角「⚙️ 設定」輸入地址以計算距離</div>`;
+        document.getElementById('park-distance-container').innerHTML = emptyTip;
+        document.getElementById('restaurant-distance-container').innerHTML = emptyTip;
+        document.getElementById('vet-distance-container').innerHTML = emptyTip;
+        return;
+      }
+
+      // 公園
+      const sortedParks = masterParks.map(p => ({
+        ...p, dist: parseFloat(getDistanceKm(appConfig.userLat, appConfig.userLng, p.lat, p.lng))
+      })).sort((a, b) => a.dist - b.dist);
+
+      document.getElementById('park-distance-container').innerHTML = sortedParks.map((p, idx) => `
+        <div class="p-3 rounded-xl border border-slate-100 bg-slate-50 flex justify-between items-center my-2">
+          <div>
+            <div class="font-bold text-slate-800 flex items-center space-x-1">
+              <span>${idx + 1}. ${p.name}</span>
+              <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded font-bold">📍 距約 ${p.dist} km</span>
+            </div>
+            <p class="text-slate-500 text-[11px] mt-0.5">${p.desc}</p>
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name)}" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] shadow-sm shrink-0">🗺️ 導航</a>
+        </div>
+      `).join('');
+
+      // 餐廳
+      const sortedRests = masterRestaurants.map(r => ({
+        ...r, dist: parseFloat(getDistanceKm(appConfig.userLat, appConfig.userLng, r.lat, r.lng))
+      })).sort((a, b) => a.dist - b.dist);
+
+      document.getElementById('restaurant-distance-container').innerHTML = sortedRests.map((r, idx) => `
+        <div id="rest-${idx+1}" class="p-3 rounded-xl border border-slate-100 bg-slate-50 flex justify-between items-center my-2">
+          <div>
+            <div class="font-bold text-slate-800 flex items-center space-x-1">
+              <span>${idx + 1}. ${r.name}</span>
+              <span class="text-amber-600 font-bold text-[10px]">📍 距約 ${r.dist} km</span>
+            </div>
+            <p class="text-slate-500 text-[11px] mt-0.5">${r.desc}</p>
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name)}" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 text-white font-bold rounded-lg text-[11px] shadow-sm shrink-0">🗺️ 導航</a>
+        </div>
+      `).join('');
+
+      // 醫院
+      const sortedVets = masterVets.map(v => ({
+        ...v, dist: parseFloat(getDistanceKm(appConfig.userLat, appConfig.userLng, v.lat, v.lng))
+      })).sort((a, b) => a.dist - b.dist);
+
+      document.getElementById('vet-distance-container').innerHTML = sortedVets.map((v, idx) => `
+        <div class="p-3 rounded-xl border border-rose-100 bg-rose-50/50 flex justify-between items-center my-2">
+          <div>
+            <div class="font-bold text-slate-800 flex items-center space-x-1">
+              <span>${v.name}</span>
+              <span class="text-rose-700 text-[10px] font-bold bg-rose-100 px-1.5 py-0.5 rounded">📍 距約 ${v.dist} km</span>
+            </div>
+            <p class="text-slate-500 text-[11px] mt-0.5">${v.desc}</p>
+          </div>
+          <a href="tel:${v.phone}" class="px-2.5 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px] shadow-sm shrink-0">📞 直撥</a>
+        </div>
+      `).join('');
+    }
+
+    // 穿搭邏輯
+    function renderOutfitsUI() {
+      const grid = document.getElementById('outfit-list-grid');
+      if (!grid) return;
+      grid.innerHTML = outfitsList.map((item, idx) => `
+        <div class="p-2 border border-slate-200 bg-slate-50 rounded-xl flex justify-between items-center">
+          <button onclick="selectOutfit('${item.name}')" class="text-left font-semibold text-slate-700 truncate flex items-center space-x-1">
+            <span class="w-2.5 h-2.5 rounded-full inline-block border" style="background-color: ${item.color};"></span>
+            <span>${item.name}</span>
+          </button>
+          ${outfitsList.length > 1 ? `<button onclick="deleteOutfit(${idx})" class="text-slate-400 hover:text-red-600 font-bold px-1 text-xs">✕</button>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function saveNewOutfit() {
+      const name = (document.getElementById('input-outfit-name').value || '').trim();
+      const color = document.getElementById('input-outfit-color').value;
+      const desc = (document.getElementById('input-outfit-desc').value || '').trim() || `${name} 服飾試穿`;
+
+      if (!name) return alert("請輸入衣服名稱！");
+      outfitsList.push({ name, color, desc });
+      localStorage.setItem('pet_app_outfits_v3', JSON.stringify(outfitsList));
+      renderOutfitsUI();
+      selectOutfit(name);
+      toggleAddOutfitModal();
+      document.getElementById('input-outfit-name').value = '';
+    }
+
+    function deleteOutfit(index) {
+      outfitsList.splice(index, 1);
+      localStorage.setItem('pet_app_outfits_v3', JSON.stringify(outfitsList));
+      renderOutfitsUI();
+    }
+
+    function selectOutfit(name) {
+      const outfit = outfitsList.find(o => o.name === name) || outfitsList[0];
+      if (outfit) {
+        document.getElementById('outfit-description').innerText = outfit.desc;
+        document.getElementById('outfit-svg-layer').innerHTML = `<path d="M 38 63 Q 50 55 105 58 Q 140 62 145 75 L 138 88 Q 90 92 42 82 Z" fill="${outfit.color}" opacity="0.9" />`;
+      }
+    }
+
+    // 相廊邏輯
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        photosList.unshift(e.target.result);
+        try { localStorage.setItem('pet_app_photos_v3', JSON.stringify(photosList)); } catch (err) {}
+        renderGallery();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function renderGallery() {
+      const gallery = document.getElementById('photo-gallery');
+      if (!gallery) return;
+      if (photosList.length === 0) {
+        gallery.innerHTML = `<div class="aspect-square bg-slate-100 rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 text-xs col-span-2 py-8"><span>🖼️ 尚無照片，點擊右上角新增</span></div>`;
+        return;
+      }
+      gallery.innerHTML = photosList.map((src, index) => `
+        <div class="aspect-square bg-slate-900 rounded-xl overflow-hidden relative shadow group">
+          <img src="${src}" class="w-full h-full object-cover">
+          <button onclick="deletePhoto(${index})" class="absolute top-1 right-1 bg-red-600/80 hover:bg-red-600 text-white w-5 h-5 rounded-full text-[10px] flex items-center justify-center shadow">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function deletePhoto(index) {
+      photosList.splice(index, 1);
+      try { localStorage.setItem('pet_app_photos_v3', JSON.stringify(photosList)); } catch (e) {}
+      renderGallery();
+    }
+
+    // 健康工具
+    let currentWeight = 10.0;
+    function adjustWeight(val) {
+      currentWeight = Math.round((currentWeight + val) * 10) / 10;
+      document.getElementById('weight-display').innerText = currentWeight.toFixed(1);
+    }
+
+    let brushed = false;
+    function toggleBrush() {
+      brushed = !brushed;
+      const check = document.getElementById('brush-check');
+      check.innerText = brushed ? "✓ 已簽到" : "未簽到";
+      check.className = brushed ? "text-emerald-600 font-bold" : "text-teal-600";
+    }
+
+    let fishoil = false;
+    function toggleFishoil() {
+      fishoil = !fishoil;
+      const check = document.getElementById('fishoil-check');
+      check.innerText = fishoil ? "✓ 已簽到" : "未簽到";
+      check.className = fishoil ? "text-emerald-600 font-bold" : "text-blue-600";
+    }
+
+    let nexgardDone = false;
+    function toggleNexgard() {
+      nexgardDone = !nexgardDone;
+      const btn = document.getElementById('nexgard-btn');
+      const status = document.getElementById('nexgard-status');
+      if(nexgardDone) {
+        btn.innerText = "✓ 已打卡";
+        btn.className = "px-3 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded-lg shadow";
+        status.innerText = "🎉 本月驅蟲藥已打卡完成！";
+      } else {
+        btn.innerText = "打勾簽到";
+        btn.className = "px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg shadow";
+        status.innerText = "點擊打勾打卡紀錄本月吃藥狀態";
+      }
+    }
+
+    function rollDice() {
+      const countRest = masterRestaurants.length;
+      let count = 0;
+      const interval = setInterval(() => {
+        const randIndex = Math.floor(Math.random() * countRest);
+        masterRestaurants.forEach((_, idx) => {
+          const el = document.getElementById(`rest-${idx+1}`);
+          if (el) {
+            el.className = (idx === randIndex) 
+              ? "p-3 rounded-xl border-2 border-indigo-500 bg-indigo-50 transition flex justify-between items-center my-2" 
+              : "p-3 rounded-xl border border-slate-100 bg-slate-50 transition flex justify-between items-center my-2";
+          }
+        });
+        count++;
+        if(count > 10) clearInterval(interval);
+      }, 100);
+    }
+
+    window.onload = function() {
+      try {
+        const savedC = localStorage.getItem('pet_app_clean_config_v3');
+        if (savedC) appConfig = JSON.parse(savedC);
+        const savedO = localStorage.getItem('pet_app_outfits_v3');
+        if (savedO) outfitsList = JSON.parse(savedO);
+        const savedP = localStorage.getItem('pet_app_photos_v3');
+        if (savedP) photosList = JSON.parse(savedP);
+      } catch(e) {}
+      
+      forceRenderAll();
+      renderOutfitsUI();
+      renderGallery();
+      selectOutfit(outfitsList[0]?.name);
+    };
+  </script>
+</body>
+</html>
